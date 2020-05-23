@@ -21,8 +21,8 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
-      - "443:443"
+      - "${WWW_PORT}:80"
+      - "${WWW_SECURITY_PORT}:443"
     volumes:
       - ./www:/var/www
       - ./config/nginx/:/etc/nginx/conf.d/
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
     volumes:
       - ./db/mysql:/var/lib/mysql
     environment:

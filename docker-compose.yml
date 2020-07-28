@@ -39,8 +39,8 @@ services:
     volumes:
       - ./db/mysql:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: default
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:

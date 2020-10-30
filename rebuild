@@ -13,8 +13,14 @@ docker rmi openweb/php:7.2
 docker rmi openweb/php:7.3
 docker rmi openweb/php:7.4
 
-docker stop db
-docker rm db
+docker stop mysql
+docker rm mysql
+
+docker stop pgsql
+docker rm pgsql
 
 docker stop redis
 docker rm redis
+
+docker stop rabbitmq
+docker rm rabbitmq

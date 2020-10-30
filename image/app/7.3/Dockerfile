@@ -6,10 +6,10 @@ RUN apt-get update -y && apt-get install -y git curl libz-dev libmemcached-dev l
 RUN pecl install xdebug-2.9.7 && docker-php-ext-enable xdebug
 
 # Redis
-RUN pecl install redis  && docker-php-ext-enable redis
+RUN pecl install redis-5.3.1  && docker-php-ext-enable redis
 
 # Memcached
-RUN pecl install memcached && docker-php-ext-enable memcached
+RUN pecl install memcached-3.1.5 && docker-php-ext-enable memcached
 
 # MySQL
 RUN docker-php-ext-install mysqli

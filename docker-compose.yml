@@ -1,6 +1,6 @@
 version: '3'
 services:
-  #App
+  #PHP
   app:
     build:
       context: ./image/app/${PHP_VERSION}/.
@@ -16,7 +16,7 @@ services:
       - ./www:/var/www
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
     networks:
-      - app-network
+      - openweb-network
   #Nginx Service
   webserver:
     image: nginx:alpine
@@ -30,11 +30,11 @@ services:
       - ./www:/var/www
       - ./config/nginx/:/etc/nginx/conf.d/
     networks:
-      - app-network
+      - openweb-network
   #MySQL Service
-  db:
+  mysql:
     image: mysql:5.7.24
-    container_name: db
+    container_name: mysql
     restart: unless-stopped
     tty: true
     ports:
@@ -47,7 +47,36 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
-      - app-network
+      - openweb-network
+  #PostgreSQL
+  pgsql:
+    image: postgres
+    container_name: pgsql
+    ports:
+      - "${PGSQL_PORT}:5432"
+    volumes:
+      - ./db/pgsql:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_USER: "${PGSQL_DATABASE}"
+      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
+    networks:
+      - openweb-network
+  #RabbitMQ
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    volumes:
+      - ./db/rabbitmq:/var/lib/rabbitmq
+      #- ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "${RABBITMQ_TRAFFIC_PORT}:5672"
+      - "${RABBITMQ_MANAGER_PORT}:15672"
+    networks:
+      - openweb-network
   #Redis Service
   redis:
     image: redis
@@ -62,7 +91,7 @@ services:
       - REDIS_REPLICATION_MODE=master
 #Docker Networks
 networks:
-  app-network:
+  openweb-network:
     driver: bridge
 #Volumes
 volumes:

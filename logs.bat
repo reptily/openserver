@@ -1,2 +1,0 @@
-docker logs app
-pause

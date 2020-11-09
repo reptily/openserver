@@ -7,6 +7,8 @@ PHP версии: 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 
 ## Linux
 
+Все действия выполняются в директории *bin*\
+
 Запуск
 ```bash
 ./start
@@ -29,6 +31,8 @@ PHP версии: 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 
 ## Windows
 
+Все действия выполняются в директории *bin*\
+
 Запуск
 * start.bat
 
@@ -41,21 +45,25 @@ PHP версии: 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 Пересобрать контейнеры
 * rebuild.bat
 
-#XDebugger
+# XDebugger
 IDE key: openweb
 
+# Импорт дополнительных скриптов в контейнеры
+Все файлы которые будут располагаться в директории *scripts* попадут в контейнер директорию */bin/app*
+
 ## Системные требования
-Свободного места - 2 GB
-Docker
+Свободного места - 2 GB\
+Docker\
 Docker compose
 
 ### Полезные ссылки
 <a href="https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe">Скачать Docker (windows)</a>
 
 ### Программное обеспечение
-PHP
-MySQL
-PosgresSQL
-Memcached
-Redis
+PHP\
+NODE.js\
+MySQL\
+PosgresSQL\
+Memcached\
+Redis\
 Xdebug

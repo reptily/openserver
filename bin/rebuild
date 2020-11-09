@@ -1,0 +1,28 @@
+#!/bin/bash
+
+cd ../
+
+PHP_VERSION=$(grep PHP_VERSION .env | cut -d '=' -f2)
+NODE_VERSION=$(grep NODE_VERSION .env | cut -d '=' -f2)
+
+docker stop webserver
+docker rm webserver
+
+docker stop php
+docker rm php
+docker rmi openweb/php:$PHP_VERSION
+
+docker stop node
+docker rm node:$NODE_VERSION
+
+docker stop mysql
+docker rm mysql
+
+docker stop pgsql
+docker rm pgsql
+
+docker stop redis
+docker rm redis
+
+docker stop rabbitmq
+docker rm rabbitmq

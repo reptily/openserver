@@ -13,9 +13,11 @@ RUN pecl install memcached-3.1.5 && docker-php-ext-enable memcached
 
 # MySQL
 RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo_mysql
 
 # PostgreSQL
 RUN docker-php-ext-install pgsql
+RUN docker-php-ext-install pdo_pgsql
 
 #GD
 RUN docker-php-ext-install gd

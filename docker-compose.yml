@@ -1,11 +1,11 @@
 version: '3'
 services:
   #PHP
-  app:
+  php:
     build:
-      context: ./image/app/${PHP_VERSION}/.
+      context: ./image/php/${PHP_VERSION}/.
     image: openweb/php:${PHP_VERSION}
-    container_name: app
+    container_name: php
     restart: unless-stopped
     tty: true
     environment:
@@ -15,6 +15,19 @@ services:
     volumes:
       - ./www:/var/www
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./scripts:/bin/app
+    networks:
+      - openweb-network
+  #NODE.js
+  node:
+    image: node:${NODE_VERSION}
+    container_name: node
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./www:/var/www
+      - ./scripts:/bin/app
     networks:
       - openweb-network
   #Nginx Service
@@ -29,6 +42,7 @@ services:
     volumes:
       - ./www:/var/www
       - ./config/nginx/:/etc/nginx/conf.d/
+      - ./scripts:/bin/app
     networks:
       - openweb-network
   #MySQL Service
@@ -41,6 +55,7 @@ services:
       - "${MYSQL_PORT}:3306"
     volumes:
       - ./db/mysql:/var/lib/mysql
+      - ./scripts:/bin/app
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
@@ -56,6 +71,7 @@ services:
       - "${PGSQL_PORT}:5432"
     volumes:
       - ./db/pgsql:/var/lib/postgresql/data/pgdata
+      - ./scripts:/bin/app
     environment:
       POSTGRES_USER: "${PGSQL_DATABASE}"
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
@@ -67,7 +83,7 @@ services:
     container_name: rabbitmq
     volumes:
       - ./db/rabbitmq:/var/lib/rabbitmq
-      #- ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+      - ./scripts:/bin/app
     environment:
       RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -87,8 +103,11 @@ services:
       - "${REDIS_PORT}:6379"
     volumes:
       - ./db/redis:/var/lib/redis
+      - ./scripts:/bin/app
     environment:
       - REDIS_REPLICATION_MODE=master
+    networks:
+      - openweb-network
 #Docker Networks
 networks:
   openweb-network:

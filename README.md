@@ -1,3 +1,7 @@
+<center>
+    <img src="https://sun9-11.userapi.com/RDoybNFs7mey2inq3razd81BsdSVaI547fVaOA/RF_7mZk-V7E.jpg">
+</center>
+
 #Поддержка
 PHP версии: 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 

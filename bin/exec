@@ -5,4 +5,4 @@ if [ ! $1 ]; then
     exit
 fi
 
-docker exec -it $1 sh
+docker exec -it $1 /bin/bash

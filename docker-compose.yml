@@ -108,6 +108,16 @@ services:
       - REDIS_REPLICATION_MODE=master
     networks:
       - openweb-network
+  #Memcached
+  memcached:
+    image: memcached
+    container_name: memcached
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${MEMCACHED_PORT}:11211"
+    networks:
+      - openweb-network
 #Docker Networks
 networks:
   openweb-network:

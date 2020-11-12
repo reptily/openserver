@@ -27,4 +27,7 @@ docker rm redis
 docker stop rabbitmq
 docker rm rabbitmq
 
+docker stop memcached
+docker rm memcached
+
 pause

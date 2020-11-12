@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ ! $1 ]; then    	
+    echo -e "\e[31mНе задан аргумент\e[0m"
+    exit
+fi
+
+cd ../
+docker logs $1

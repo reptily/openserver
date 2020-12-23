@@ -33,7 +33,7 @@ RUN pecl install redis-5.3.1  && docker-php-ext-enable redis
 
 # Memcached
 RUN pecl bundle memcached-3.1.5 && cd memcached && phpize && ./configure --enable-memcached-igbinary && make && make install && docker-php-ext-enable memcached
-RUN pecl install memcache && docker-php-ext-enable memcache
+RUN pecl install memcache-4.0.5.2 && docker-php-ext-enable memcache
 
 # MySQL
 RUN docker-php-ext-install mysqli

@@ -18,13 +18,17 @@ libevent-dev
 
 # PHP extension
 RUN docker-php-ext-install calendar
-#RUN pecl install decimal-1.3.1 && docker-php-ext-enable decimal //todo not support php 8
-#RUN docker-php-ext-install decimal //todo not support php 8
 RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install sockets
 RUN docker-php-ext-install zip
 RUN pecl install igbinary && docker-php-ext-enable igbinary
+
+# decimal
+RUN docker-php-source extract \
+    && git clone --branch 1.x-php8 --depth 1 https://github.com/zlodes/ext-decimal.git /usr/src/php/ext/decimal \
+    && cd /usr/src/php/ext/decimal && git submodule update --init \
+    && docker-php-ext-install decimal
 
 # Xdebug
 RUN pecl install xdebug-3.0.0 && docker-php-ext-enable xdebug
@@ -34,7 +38,7 @@ RUN pecl install redis-5.3.2  && docker-php-ext-enable redis
 
 # Memcached
 RUN pecl bundle memcached-3.1.5 && cd memcached && phpize && ./configure --enable-memcached-igbinary && make && make install && docker-php-ext-enable memcached
-#RUN pecl install memcache && docker-php-ext-enable memcache //todo not support php 8
+RUN pecl install memcache-8.0 && docker-php-ext-enable memcache
 
 # MySQL
 RUN docker-php-ext-install mysqli
@@ -45,7 +49,10 @@ RUN docker-php-ext-install pgsql
 RUN docker-php-ext-install pdo_pgsql
 
 # RabbitMQ
-#RUN pecl install amqp-1.10.2 && docker-php-ext-enable amqp //todo not support php 8
+RUN docker-php-source extract \
+    && git clone --branch master --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
+    && cd /usr/src/php/ext/amqp && git submodule update --init \
+    && docker-php-ext-install amqp
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \

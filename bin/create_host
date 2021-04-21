@@ -1,0 +1,30 @@
+#!/bin/bash
+
+NGINX_CONFIG=../config/nginx/sites/
+NGINX_HOSTDIR=../www/
+
+echo "What domain to create?";
+read NEWHOSTNAME
+
+if [ -f "$NGINX_CONFIG$NEWHOSTNAME.conf" ]
+then
+    echo "Error: config file already exists $NGINX_CONFIG$NEWHOSTNAME.conf"
+    exit
+fi
+
+if [ -d "$NGINX_HOSTDIR$NEWHOSTNAME" ]
+then
+    echo "Error: directory already exists $NGINX_HOSTDIR$NEWHOSTNAME"
+    exit
+fi
+
+mkdir "$NGINX_HOSTDIR$NEWHOSTNAME"
+
+sed "s/{{host_name}}/$NEWHOSTNAME/g" "$NGINX_CONFIG../template.conf" > "$NGINX_CONFIG$NEWHOSTNAME.conf"
+
+if ! grep -q "127.0.0.1 $NEWHOSTNAME" "/etc/hosts"
+then
+    sudo sh -c "echo \"127.0.0.1 $NEWHOSTNAME\" >> /etc/hosts"
+fi
+
+echo "Complete!"

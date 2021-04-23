@@ -5,27 +5,27 @@ cd ../
 PHP_VERSION=$(grep PHP_VERSION .env | cut -d '=' -f2)
 NODE_VERSION=$(grep NODE_VERSION .env | cut -d '=' -f2)
 
-docker stop webserver
-docker rm webserver
+docker stop os-nginx
+docker rm os-nginx
 
-docker stop php
-docker rm php
+docker stop os-php${PHP_VERSION}
+docker rm os-php${PHP_VERSION}
 docker rmi openweb/php:$PHP_VERSION
 
-docker stop node
-docker rm node:$NODE_VERSION
+docker stop os-node$NODE_VERSION
+docker rm os-node$NODE_VERSION
 
-docker stop mysql
-docker rm mysql
+docker stop os-mysql5.7.24
+docker rm os-mysql5.7.24
 
-docker stop pgsql
-docker rm pgsql
+docker stop os-pgsql
+docker rm os-pgsql
 
-docker stop redis
-docker rm redis
+docker stop os-redis
+docker rm os-redis
 
-docker stop rabbitmq
-docker rm rabbitmq
+docker stop os-rabbitmq
+docker rm os-rabbitmq
 
-docker stop memcached
-docker rm memcached
+docker stop os-memcached
+docker rm os-memcached

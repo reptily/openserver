@@ -5,7 +5,7 @@ services:
     build:
       context: ./image/php/${PHP_VERSION}/.
     image: openweb/php:${PHP_VERSION}
-    container_name: php
+    container_name: os-php${PHP_VERSION}
     restart: unless-stopped
     tty: true
     environment:
@@ -21,7 +21,7 @@ services:
   #NODE.js
   node:
     image: node:${NODE_VERSION}
-    container_name: node
+    container_name: os-node${NODE_VERSION}
     restart: unless-stopped
     tty: true
     working_dir: /var/www
@@ -33,7 +33,7 @@ services:
   #Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: webserver
+    container_name: os-nginx
     restart: unless-stopped
     tty: true
     ports:
@@ -48,7 +48,7 @@ services:
   #MySQL Service
   mysql:
     image: mysql:5.7.24
-    container_name: mysql
+    container_name: os-mysql5.7.24
     restart: unless-stopped
     tty: true
     ports:
@@ -66,7 +66,8 @@ services:
   #PostgreSQL
   pgsql:
     image: postgres
-    container_name: pgsql
+    container_name: os-pgsql
+    tty: true,
     ports:
       - "${PGSQL_PORT}:5432"
     volumes:
@@ -80,7 +81,8 @@ services:
   #RabbitMQ
   rabbitmq:
     image: rabbitmq
-    container_name: rabbitmq
+    container_name: os-rabbitmq
+    tty: true,
     volumes:
       - ./db/rabbitmq:/var/lib/rabbitmq
       - ./scripts:/bin/app
@@ -96,7 +98,7 @@ services:
   #Redis Service
   redis:
     image: redis
-    container_name: redis
+    container_name: os-redis
     restart: unless-stopped
     tty: true
     ports:
@@ -111,7 +113,7 @@ services:
   #Memcached
   memcached:
     image: memcached
-    container_name: memcached
+    container_name: os-memcached
     restart: unless-stopped
     tty: true
     ports:

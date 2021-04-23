@@ -71,7 +71,7 @@ services:
     ports:
       - "${PGSQL_PORT}:5432"
     volumes:
-      - ./db/pgsql:/var/lib/postgresql/data/pgdata
+      - ./db/pgsql:/var/lib/postgresql
       - ./scripts:/bin/app
     environment:
       POSTGRES_USER: "${PGSQL_DATABASE}"

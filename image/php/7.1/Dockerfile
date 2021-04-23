@@ -1,6 +1,7 @@
 FROM php:7.1-fpm
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y 
+RUN apt-get install -y \
 git \
 curl \
 libz-dev \
@@ -14,12 +15,18 @@ libpq-dev \
 librabbitmq-dev \
 libmpdec-dev \
 libzip-dev \
-libevent-dev
+libevent-dev \
+libfreetype6-dev \
+libjpeg62-turbo-dev \ 
+libpng-dev \
+libicu-dev
 
 # PHP extension
+RUN docker-php-ext-install intl
 RUN docker-php-ext-install calendar
 RUN pecl install decimal-1.3.0 && docker-php-ext-enable decimal
 RUN docker-php-ext-install pcntl
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install sockets
 RUN docker-php-ext-install zip
@@ -52,6 +59,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
         --filename=composer \
         --install-dir=/usr/local/bin && \
         echo "alias composer='composer'" >> /root/.bashrc
+
 
 CMD ["php-fpm", "-F"]
 

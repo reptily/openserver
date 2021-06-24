@@ -20,7 +20,7 @@ fi
 
 mkdir "$NGINX_HOSTDIR$NEWHOSTNAME"
 
-sed "s/{{host_name}}/$NEWHOSTNAME/g" "$NGINX_CONFIG../template.conf" > "$NGINX_CONFIG$NEWHOSTNAME.conf"
+sed "s/{{host_name}}/$NEWHOSTNAME/g" "$NGINX_CONFIG../template.conf-example" > "$NGINX_CONFIG$NEWHOSTNAME.conf"
 
 if ! grep -q "127.0.0.1 $NEWHOSTNAME" "/etc/hosts"
 then

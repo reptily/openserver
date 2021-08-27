@@ -2,32 +2,33 @@ cd ../
 
 Set FILE=.env
 
+For /F "PREFIX=* delims=" %%i In ("%FILE%") Do Set PREFIX=%%i
 For /F "PHP_VERSION=* delims=" %%i In ("%FILE%") Do Set PHP_VERSION=%%i
 For /F "NODE_VERSION=* delims=" %%i In ("%FILE%") Do Set NODE_VERSION=%%i
 
-docker stop webserver
-docker rm webserver
+docker stop %PREFIX%webserver
+docker rm %PREFIX%webserver
 
-docker stop php
-docker rm php
+docker stop %PREFIX%php
+docker rm %PREFIX%php
 docker rmi openweb/php:%PHP_VERSION%
 
-docker stop node
-docker rm node:%NODE_VERSION%
+docker stop %PREFIX%node
+docker rm %PREFIX%node:%NODE_VERSION%
 
-docker stop mysql
-docker rm mysql
+docker stop %PREFIX%mysql
+docker rm %PREFIX%mysql
 
-docker stop pgsql
-docker rm pgsql
+docker stop %PREFIX%pgsql
+docker rm %PREFIX%pgsql
 
-docker stop redis
-docker rm redis
+docker stop %PREFIX%redis
+docker rm %PREFIX%redis
 
-docker stop rabbitmq
-docker rm rabbitmq
+docker stop %PREFIX%rabbitmq
+docker rm %PREFIX%rabbitmq
 
-docker stop memcached
-docker rm memcached
+docker stop %PREFIX%memcached
+docker rm %PREFIX%memcached
 
 pause

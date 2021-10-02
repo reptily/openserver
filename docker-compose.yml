@@ -73,7 +73,7 @@ services:
       - ./db/pgsql:/var/lib/postgresql
       - ./scripts:/bin/app
     environment:
-      POSTGRES_USER: "${PGSQL_DATABASE}"
+      POSTGRES_USER: "${PGSQL_USER}"
       POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
     networks:
       - openweb-network

@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 RUN apt-get update -y && apt-get install -y \
 git \
@@ -31,10 +31,10 @@ RUN docker-php-source extract \
     && docker-php-ext-install decimal
 
 # Xdebug
-RUN pecl install xdebug-3.0.0 && docker-php-ext-enable xdebug
+RUN pecl install xdebug-3.1.2 && docker-php-ext-enable xdebug
 
 # Redis
-RUN pecl install redis-5.3.2  && docker-php-ext-enable redis
+RUN pecl install redis-5.3.4  && docker-php-ext-enable redis
 
 # Memcached
 RUN pecl bundle memcached-3.1.5 && cd memcached && phpize && ./configure --enable-memcached-igbinary && make && make install && docker-php-ext-enable memcached

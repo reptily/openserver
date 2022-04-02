@@ -1,0 +1,5 @@
+#PosgresSQL
+PGSQL_PORT=5432
+PGSQL_USER=default
+PGSQL_PASSWORD=root
+

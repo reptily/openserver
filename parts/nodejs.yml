@@ -1,0 +1,13 @@
+  #NODE.js
+  node:
+    image: "node:${NODE_VERSION}"
+    container_name: "${PREFIX}node"
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./www:/var/www
+      - ./scripts:/bin/app
+    networks:
+      - openweb-network
+

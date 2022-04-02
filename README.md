@@ -13,6 +13,11 @@ PHP версии: 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 
 Все действия выполняются в директории *bin*
 
+Собрать выборочную сборку
+```bash
+./build
+```
+
 Запуск
 ```bash
 ./start
@@ -31,6 +36,11 @@ PHP версии: 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 Пересобрать контейнеры
 ```bash
 ./rebuild
+```
+
+Создать новый локальный хост
+```bash
+./create_host
 ```
 
 ## Windows
@@ -72,6 +82,8 @@ Docker compose
 ### Полезные ссылки
 <a href="https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe">Скачать Docker (windows)</a>
 
+<a href="https://reptily.ru/donate">Поддержка проекта</a>
+
 ### Программное обеспечение
 PHP\
 NODE.js\
@@ -79,4 +91,5 @@ MySQL\
 PosgresSQL\
 Memcached\
 Redis\
-Xdebug
+Xdebug\
+MongoDB

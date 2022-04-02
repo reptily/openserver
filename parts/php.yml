@@ -1,0 +1,19 @@
+#PHP
+  php:
+    build:
+      context: "./image/php/${PHP_VERSION}/."
+    image: "openweb/php:${PHP_VERSION}"
+    container_name: "${PREFIX}php"
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./www:/var/www
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./scripts:/bin/app
+    networks:
+      - openweb-network
+

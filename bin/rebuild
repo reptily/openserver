@@ -5,6 +5,7 @@ cd ../
 PREFIX=$(grep PREFIX .env | cut -d '=' -f2)
 PHP_VERSION=$(grep PHP_VERSION .env | cut -d '=' -f2)
 NODE_VERSION=$(grep NODE_VERSION .env | cut -d '=' -f2)
+MONGODB_VERSION=$(grep MONGODB_VERSION .env | cut -d '=' -f2)
 
 docker stop $PREFIX"webserver"
 docker rm $PREFIX"webserver"
@@ -30,3 +31,6 @@ docker rm $PREFIX"rabbitmq"
 
 docker stop $PREFIX"memcached"
 docker rm $PREFIX"memcached"
+
+docker stop $PREFIX"mongo"
+docker rm $PREFIX"mongo":$MONGODB_VERSION

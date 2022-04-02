@@ -1,0 +1,12 @@
+  #MongoDB
+  mongodb:
+    image: "mongo:${MONGODB_VERSION}"
+    container_name: "${PREFIX}mongo"
+    volumes:
+      - ./db/mongodb:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_USER}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_PASSWORD}"
+    networks:
+      - openweb-network
+

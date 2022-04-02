@@ -1,0 +1,19 @@
+  #MySQL Service
+  mysql:
+    image: mysql:5.7.24
+    container_name: "${PREFIX}mysql"
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+      - ./scripts:/bin/app
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - openweb-network
+

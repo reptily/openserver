@@ -1,0 +1,15 @@
+  #PostgreSQL
+  pgsql:
+    image: postgres
+    container_name: "${PREFIX}pgsql"
+    ports:
+      - "${PGSQL_PORT}:5432"
+    volumes:
+      - ./db/pgsql:/var/lib/postgresql
+      - ./scripts:/bin/app
+    environment:
+      POSTGRES_USER: "${PGSQL_USER}"
+      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
+    networks:
+      - openweb-network
+

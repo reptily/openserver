@@ -5,6 +5,7 @@ Set FILE=.env
 For /F "PREFIX=* delims=" %%i In ("%FILE%") Do Set PREFIX=%%i
 For /F "PHP_VERSION=* delims=" %%i In ("%FILE%") Do Set PHP_VERSION=%%i
 For /F "NODE_VERSION=* delims=" %%i In ("%FILE%") Do Set NODE_VERSION=%%i
+For /F "MONGODB_VERSION=* delims=" %%i In ("%FILE%") Do Set MONGODB_VERSION=%%i
 
 docker stop %PREFIX%webserver
 docker rm %PREFIX%webserver
@@ -30,5 +31,8 @@ docker rm %PREFIX%rabbitmq
 
 docker stop %PREFIX%memcached
 docker rm %PREFIX%memcached
+
+docker stop %PREFIX%mongo
+docker rm %PREFIX%mongo:%MONGODB_VERSION%
 
 pause

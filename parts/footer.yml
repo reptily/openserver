@@ -1,0 +1,8 @@
+#Docker Networks
+networks:
+  openweb-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local

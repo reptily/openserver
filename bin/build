@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ -f "../docker-compose.yml" ]; then
+    echo -e "\033[1;33m!!!WARNING!!!\033[0m if you continue further, the old config docker will be deleted [Y/\033[1;33mN\033[0m]";
+    read CONTINUE
+    if [[ $CONTINUE =~ ^([nN][oO]|[nN])$ ]]; then
+        echo "Bye, bye!"
+        exit
+    fi
+fi
+
+rm ../docker-compose.yml
+cat ../parts/head.yml >> ../docker-compose.yml
+
+ENV_FOUND=true
+if [ ! -f "../.env" ]; then
+    ENV_FOUND=false
+    cat ../parts/env_head >> ../.env
+fi
+
+PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb)
+
+for item in ${PARTS[*]}
+do
+    echo -e "Do you want install \033[1;32m$item\033[0m? [\033[1;33mY\033[0m/N]";
+    read ANSWER
+
+    if [[ $ANSWER =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        cat ../parts/$item.yml >> ../docker-compose.yml
+
+        if [ $ENV_FOUND = "false" ]; then
+            cat ../parts/env_$item >> ../.env
+        fi
+    fi
+done
+
+cat ../parts/footer.yml >> ../docker-compose.yml

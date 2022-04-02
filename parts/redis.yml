@@ -1,0 +1,16 @@
+  #Redis Service
+  redis:
+    image: redis
+    container_name: "${PREFIX}redis"
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - ./db/redis:/var/lib/redis
+      - ./scripts:/bin/app
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - openweb-network
+

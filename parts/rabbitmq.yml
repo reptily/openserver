@@ -1,0 +1,17 @@
+  #RabbitMQ
+  rabbitmq:
+    image: rabbitmq
+    container_name: "${PREFIX}rabbitmq"
+    volumes:
+      - ./db/rabbitmq:/var/lib/rabbitmq
+      - ./scripts:/bin/app
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "${RABBITMQ_TRAFFIC_PORT}:5672"
+      - "${RABBITMQ_MANAGER_PORT}:15672"
+    networks:
+      - openweb-network
+

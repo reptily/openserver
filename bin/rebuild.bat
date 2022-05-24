@@ -35,4 +35,10 @@ docker rm %PREFIX%memcached
 docker stop %PREFIX%mongo
 docker rm %PREFIX%mongo:%MONGODB_VERSION%
 
+docker stop %PREFIX%clickhouse-server
+docker rm %PREFIX%clickhouse-server
+
+docker stop %PREFIX%clickhouse-client
+docker rm %PREFIX%clickhouse-client
+
 pause

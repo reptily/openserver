@@ -139,6 +139,28 @@ services:
     networks:
       - openweb-network
 
+  #Clickhouse
+  clickhouse-server:
+    image: yandex/clickhouse-server
+    container_name: "${PREFIX}clickhouse-server"
+    restart: unless-stopped
+    ports:
+      - "${CLICKHOUSE_DB_PORT}:8123"
+      - "${CLICKHOUSE_CLIENT_PORT}:9000"
+      - "${CLICKHOUSE_REPLICATION_PORT}:9009"
+    volumes:
+      - ./db/clickhouse:/var/lib/clickhouse
+      - ./scripts:/bin/app
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 262144
+        hard: 262144
+  client:
+    image: yandex/clickhouse-client
+    container_name: "${PREFIX}clickhouse-client"
+    command: ['--host', 'server']
+
 #Docker Networks
 networks:
   openweb-network:

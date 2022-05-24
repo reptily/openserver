@@ -18,7 +18,7 @@ if [ ! -f "../.env" ]; then
     cat ../parts/env_head >> ../.env
 fi
 
-PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb)
+PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse)
 
 for item in ${PARTS[*]}
 do

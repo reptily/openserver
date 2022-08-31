@@ -15,5 +15,7 @@
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
       - ./scripts:/bin/app
     networks:
-      - openweb-network
+      openweb-network:
+        aliases:
+          - php
 

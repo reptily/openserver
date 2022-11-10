@@ -1,0 +1,272 @@
+#!/bin/bash
+
+RESULT=''
+WIDTH=15
+HEIGHT=40
+
+BUILD_PREFIX='ow_'
+PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse)
+
+
+function openDialog()
+{
+    exec 3>&1;
+    RESULT=$(dialog --keep-tite --clear "$@" 2>&1 1>&3);
+    exec 3>&-;
+    clear
+}
+
+function actionSettings()
+{
+    if [ ! -f "../.env" ]; then
+        openDialog --msgbox ".env file not found." $WIDTH $HEIGHT
+        actionBuild
+    fi
+
+    LINE=0
+    POSITION=1
+    OPTIONS=''
+    ARRAY_PARAMS=()
+
+    for SETTING in $(awk -F'=' '/=/{ print $1, $2}' ../.env)
+    do
+        ((LINE++))
+        if [ $LINE = 2 ]; then
+            OPTIONS+="$SETTING $POSITION 35 25 30 "
+            LINE=0
+            ((POSITION++))
+        else
+            OPTIONS+="$SETTING $POSITION 1 "
+            ARRAY_PARAMS+=($SETTING)
+        fi
+    done
+
+    openDialog --form "\nContainer settings" 36 80 35 $OPTIONS
+
+    if [[ ! $RESULT =~ (.+) ]]; then
+        actionMenu
+    fi
+
+    I=0
+    while read -r LINE; do
+        sed -i s/${ARRAY_PARAMS[$I]}=.*/${ARRAY_PARAMS[$I]}=$LINE/ ../.env
+        ((I++))
+    done <<< $RESULT
+
+    actionMenu
+}
+
+function actionBuild()
+{
+    if [ -f "../docker-compose.yml" ]; then
+        dialog --yesno "If you continue further, the old config docker will be deleted" $WIDTH $HEIGHT
+    fi
+
+    rm ../.env
+    cat ../parts/env_head >> ../.env
+    rm ../docker-compose.yml
+    cat ../parts/head.yml >> ../docker-compose.yml
+
+    case $? in
+    0 )
+        openDialog --inputbox "Enter prefix for conteiner" $WIDTH $HEIGHT $BUILD_PREFIX
+        if [[ $RESULT =~ (.+) ]]; then
+            BUILD_PREFIX=$RESULT
+        fi
+
+        sed -i s/{PREFIX}/$BUILD_PREFIX/ ../.env
+
+        OPTIONS=''
+        for PART in ${PARTS[*]}
+        do
+            OPTIONS+="$PART   off "
+        done
+
+        openDialog --checklist "Select modules, <space> to select" 20 $HEIGHT 100 $OPTIONS
+
+        if [[ ! $RESULT =~ (.+) ]]; then
+            actionBuild
+        fi
+
+        SELECT_PARTS=($(echo $RESULT | tr " " "\n"))
+        for PART in "${SELECT_PARTS[@]}"
+        do
+            cat ../parts/env_$PART >> ../.env
+            cat ../parts/$PART.yml >> ../docker-compose.yml
+        done
+
+        cat ../parts/footer.yml >> ../docker-compose.yml
+
+        openDialog --msgbox "Building conteiners complited!" $WIDTH $HEIGHT
+        actionSettings
+    ;;
+    esac
+    clear
+
+    actionMenu
+}
+
+function actionMenu()
+{
+    openDialog --menu "Menu:" $WIDTH $HEIGHT 4 \
+        "Conteiners" "Conteiners panel" \
+        "Logs" "Logs conteiner" \
+        "Settings" "Configure conteiners" \
+        "Build" "Builder project" \
+        "Exit" "Exit application"
+
+    case $RESULT in
+    'Conteiners' )
+        actionConteinersPanel
+    ;;
+    "Logs" )
+        docker-compose logs
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        actionMenu
+    ;;
+    "Settings" )
+        actionSettings
+    ;;
+    "Build" )
+        actionBuild
+    ;;
+    "Exit" )
+        exit
+        clear
+    ;;
+    esac
+}
+
+function actionStatusesConteiners()
+{
+    MESSAGE=''
+    LINE=0
+    for CONTEINER_INFO in $(docker-compose ps | tail -n +3 | awk '{ print $1, $4, $5 }')
+    do
+        ((LINE++))
+        MESSAGE+="$CONTEINER_INFO"
+        if [ $LINE = 3 ]; then
+            MESSAGE+="\n"
+            LINE=0
+        else
+            MESSAGE+="    "
+        fi
+    done
+
+    openDialog --msgbox "$MESSAGE" $WIDTH 100
+}
+
+function actionConteinersPanel()
+{
+    openDialog --menu "Menu:" $WIDTH $HEIGHT 5 \
+        "Start" "Start all conteiners" \
+        "Stop" "Stop all conteiners" \
+        "Restart" "Restart all conteiners" \
+        "Statuses" "Status conteiners" \
+        "List" "List conteiners" \
+        "Back" "Back to menu"
+
+    case $RESULT in
+    "Start" )
+        sh start
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        actionConteinersPanel
+    ;;
+    "Stop" )
+        sh stop
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        actionConteinersPanel
+    ;;
+    "Restart" )
+        sh stop
+        sh start
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        actionConteinersPanel
+    ;;
+    "Statuses" )
+        actionStatusesConteiners
+    ;;
+    "List" )
+        actionConteinersList
+    ;;
+    "Back" )
+        actionMenu
+    ;;
+    esac
+}
+
+function actionControllerConteiner()
+{
+    openDialog --menu "$1:" $WIDTH $HEIGHT 5 \
+        "Run" "Run conteiner" \
+        "Stop" "Stop conteiner" \
+        "Restart" "Restart conteiner" \
+        "Log" "Log conteiner" \
+        "Back" "Back to menu"
+
+    case $RESULT in
+    "Run" )
+        cd ../
+        docker-compose start $1
+        cd ./bin
+        actionControllerConteiner $1
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+    ;;
+    "Stop" )
+    cd ../
+        docker-compose stop $1
+        cd ./bin
+        actionControllerConteiner $1
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        ;;
+    "Restart" )
+        cd ../
+        docker-compose stop $1
+        docker-compose start $1
+        cd ./bin
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        actionControllerConteiner $1
+    ;;
+    "Log" )
+        docker-compose logs $1
+        echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
+        read
+        actionControllerConteiner $1
+    ;;
+    "Back" )
+        actionConteinersList
+    ;;
+    esac
+}
+
+function actionConteinersList()
+{
+    NUMBER_CONTAINER=1
+    OPTIONS=''
+    ARRAY_CONTAINERS=('none')
+    for DOCKER_NAME in $(docker-compose ps --service)
+    do
+        OPTIONS+="$NUMBER_CONTAINER $DOCKER_NAME "
+        ((NUMBER_CONTAINER++))
+        ARRAY_CONTAINERS+=($DOCKER_NAME)
+    done
+
+    openDialog --menu "Menu:" $WIDTH $HEIGHT 5 $OPTIONS "Exit" "Back to menu"
+
+    if [ $RESULT = "Exit" ]; then
+        actionConteinersPanel
+        return
+    fi
+
+    actionControllerConteiner ${ARRAY_CONTAINERS[$RESULT]}
+}
+
+
+actionMenu

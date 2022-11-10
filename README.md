@@ -13,6 +13,14 @@ PHP версии: 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 
 Все действия выполняются в директории *bin*
 
+Чтобы запустить графический помощник (требуется установленный пакет dialog)
+```bash
+./app
+```
+<p align="center">
+    <img src="https://sun9-76.userapi.com/impg/rfAMhsvA-wwePbEFo3XwTnNvlDk7GfuXh81zvw/OKYh8qfv10I.jpg?size=568x305&quality=95&sign=a091017720d7cb708b74a6a2922de35d&type=album">
+</p>
+
 Собрать выборочную сборку
 ```bash
 ./build
@@ -32,6 +40,16 @@ PHP версии: 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.4
 ```bash
 ./exec app
 ```
+Если запустить без аргумента, открывается список доступных контейнеров, и по выброному номеру можно будет ощуществить вход.
+```bash
+./exec
+```
+```bash
+Select number container: 1, 2, 3 ...
+1) ow_php
+2) ow_mysql
+```
+
 
 Пересобрать контейнеры
 ```bash
@@ -92,4 +110,5 @@ PosgresSQL\
 Memcached\
 Redis\
 Xdebug\
-MongoDB
+MongoDB \
+ClickHouse

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+BUILD_PREFIX='ow_'
+ENV_BUILD=false
+
 if [ -f "../docker-compose.yml" ]; then
     echo -e "\033[1;33m!!!WARNING!!!\033[0m if you continue further, the old config docker will be deleted [Y/\033[1;33mN\033[0m]";
     read CONTINUE
@@ -12,10 +15,23 @@ fi
 rm ../docker-compose.yml
 cat ../parts/head.yml >> ../docker-compose.yml
 
-ENV_FOUND=true
-if [ ! -f "../.env" ]; then
-    ENV_FOUND=false
-    cat ../parts/env_head >> ../.env
+if [ -f "../.env" ]; then
+    echo -e "Delete env file? [Y/\033[1;33mN\033[0m]";
+    read CONTINUE
+    if [[ $CONTINUE =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        rm ../.env
+        cat ../parts/env_head >> ../.env
+
+        echo -e "Input prefix for conteiners? Example: \033[1;33mow_\033[0m";
+        read INPUT_PREFIX
+
+        if [[ $INPUT_PREFIX =~ (.+) ]]; then
+            BUILD_PREFIX=$INPUT_PREFIX
+        fi
+
+        sed -i s/{PREFIX}/$BUILD_PREFIX/ ../.env
+        ENV_BUILD=true
+    fi
 fi
 
 PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse)
@@ -28,7 +44,7 @@ do
     if [[ $ANSWER =~ ^([yY][eE][sS]|[yY])$ ]]; then
         cat ../parts/$item.yml >> ../docker-compose.yml
 
-        if [ $ENV_FOUND = "false" ]; then
+        if [ $ENV_BUILD = "true" ]; then
             cat ../parts/env_$item >> ../.env
         fi
     fi

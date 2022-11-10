@@ -2,3 +2,4 @@
 
 cd ../
 docker-compose up -d
+cd ./bin

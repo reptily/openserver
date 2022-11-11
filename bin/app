@@ -205,6 +205,7 @@ function actionControllerConteiner()
         "Run" "Run conteiner" \
         "Stop" "Stop conteiner" \
         "Restart" "Restart conteiner" \
+        "Enter" "Enter to conteiner" \
         "Log" "Log conteiner" \
         "Back" "Back to menu"
 
@@ -232,6 +233,11 @@ function actionControllerConteiner()
         cd ./bin
         echo -e "\033[1;32mPlease press any key to continue ...\033[0m"
         read
+        actionControllerConteiner $1
+    ;;
+    "Enter" )
+        echo -e "\033[1;32mPlease input comand \033[1;33mexit \033[1;32mto back application.\033[0m"
+        docker-compose exec $1 /bin/bash
         actionControllerConteiner $1
     ;;
     "Log" )

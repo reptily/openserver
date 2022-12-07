@@ -257,12 +257,14 @@ function actionConteinersList()
     NUMBER_CONTAINER=1
     OPTIONS=''
     ARRAY_CONTAINERS=('none')
+    cd ../
     for DOCKER_NAME in $(docker-compose ps --service)
     do
         OPTIONS+="$NUMBER_CONTAINER $DOCKER_NAME "
         ((NUMBER_CONTAINER++))
         ARRAY_CONTAINERS+=($DOCKER_NAME)
     done
+    cd ./
 
     openDialog --menu "Menu:" $WIDTH $HEIGHT 5 $OPTIONS "Exit" "Back to menu"
 

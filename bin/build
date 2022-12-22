@@ -34,7 +34,7 @@ if [ -f "../.env" ]; then
     fi
 fi
 
-PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse)
+PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse python)
 
 for item in ${PARTS[*]}
 do

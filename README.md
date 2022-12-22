@@ -104,6 +104,7 @@ Docker compose
 
 ### Программное обеспечение
 PHP\
+Python\
 NODE.js\
 MySQL\
 PosgresSQL\

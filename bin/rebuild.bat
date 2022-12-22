@@ -41,4 +41,7 @@ docker rm %PREFIX%clickhouse-server
 docker stop %PREFIX%clickhouse-client
 docker rm %PREFIX%clickhouse-client
 
+docker stop %PREFIX%python
+docker rm %PREFIX%python
+
 pause

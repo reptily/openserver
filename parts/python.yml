@@ -1,0 +1,13 @@
+  #Python
+  python:
+    image: "python:${PYTHON_VERSION}"
+    container_name: "${PREFIX}python"
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./www:/var/www
+      - ./scripts:/bin/app
+    networks:
+      - openweb-network
+

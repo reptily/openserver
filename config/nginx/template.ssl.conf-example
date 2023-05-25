@@ -1,0 +1,28 @@
+server {
+    server_name {{host_name}};
+    listen 443 ssl;
+    ssl on;
+    ssl_certificate /etc/nginx/conf.d/ssl/{{host_name}}/fullchain1.pem;
+    ssl_certificate_key /etc/nginx/conf.d/ssl/{{host_name}}/privkey1.pem;
+
+    charset utf-8;
+    access_log  /var/log/nginx/{{host_name}}.access.log  main;
+
+    root   /var/www/{{host_name}};
+    index  index.php;
+
+    location / {
+        root   /var/www/{{host_name}};
+        index  index.html index.htm index.php;
+    }
+}
+
+server {
+    if ($host = {{host_name}}) {
+        return 301 https://$host$request_uri;
+    }
+
+
+    server_name {{host_name}};
+    return 404;
+}

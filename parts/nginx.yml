@@ -10,6 +10,8 @@
     volumes:
       - ./www:/var/www
       - ./config/nginx/:/etc/nginx/conf.d/
+      - ./config/nginx/:/etc/nginx/sites-available/
+      - ./config/nginx/:/etc/nginx/sites-enabled/
       - ./scripts:/bin/app
     networks:
       - openweb-network

@@ -1,8 +1,14 @@
 #!/bin/bash
 
+if ! command -v dialog &> /dev/null
+then
+    echo "dialog not found"
+    exit
+fi
+
 RESULT=''
 WIDTH=15
-HEIGHT=40
+HEIGHT=50
 
 BUILD_PREFIX='ow_'
 PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse python)
@@ -106,6 +112,15 @@ function actionBuild()
     actionMenu
 }
 
+function actionSSL()
+{
+    clear
+    ./ssl_generate
+    clear
+
+    actionMenu
+}
+
 function actionMenu()
 {
     openDialog --menu "Menu:" $WIDTH $HEIGHT 4 \
@@ -113,6 +128,7 @@ function actionMenu()
         "Logs" "Logs conteiner" \
         "Settings" "Configure conteiners" \
         "Build" "Builder project" \
+        "SSL" "SSL certificate generate" \
         "Exit" "Exit application"
 
     case $RESULT in
@@ -130,6 +146,9 @@ function actionMenu()
     ;;
     "Build" )
         actionBuild
+    ;;
+    "SSL" )
+        actionSSL
     ;;
     "Exit" )
         exit

@@ -1,6 +1,6 @@
 #Bash Service
   bash:
-    image: alpine:latest
+    image: ubuntu:latest
     container_name: "${PREFIX}bash"
     restart: unless-stopped
     tty: true

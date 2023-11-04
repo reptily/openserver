@@ -11,7 +11,7 @@ WIDTH=15
 HEIGHT=50
 
 BUILD_PREFIX='ow_'
-PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse python)
+PARTS=(nginx php nodejs mysql posgresql rabbitmq redis memcached mongodb clickhouse python bash)
 
 
 function openDialog()

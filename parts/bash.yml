@@ -1,0 +1,13 @@
+#Bash Service
+  bash:
+    image: ubuntu:latest
+    container_name: "${PREFIX}bash"
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${BASH_PORT}:4000"
+    volumes:
+      - ./scripts:/bin/app
+    networks:
+      - openweb-network
+

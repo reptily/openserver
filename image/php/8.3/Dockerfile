@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:8.3-fpm
 
 RUN apt-get update -y && apt-get install -y \
 git \
@@ -22,22 +22,27 @@ RUN cd mpdecimal-2.5.1 && ./configure && make && make install
 
 # PHP extension
 RUN docker-php-ext-install calendar
-RUN pecl install decimal-1.3.0 && docker-php-ext-enable decimal
 RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install sockets
 RUN docker-php-ext-install zip
 RUN pecl install igbinary && docker-php-ext-enable igbinary
 
+# decimal
+RUN docker-php-source extract \
+    && git clone --branch 1.x-php8 --depth 1 https://github.com/reptily/ext-decimal.git /usr/src/php/ext/decimal \
+    && cd /usr/src/php/ext/decimal && git submodule update --init \
+    && docker-php-ext-install decimal
+
 # Xdebug
-RUN pecl install xdebug-2.6.1 && docker-php-ext-enable xdebug
+RUN pecl install xdebug-3.3.0alpha3 && docker-php-ext-enable xdebug # TODO - на момент релиза php 8.3, xdebug 3.3.0 был не готов
 
 # Redis
-RUN pecl install redis-5.3.1  && docker-php-ext-enable redis
+RUN pecl install redis-5.3.4  && docker-php-ext-enable redis
 
 # Memcached
 RUN pecl bundle memcached-3.1.5 && cd memcached && phpize && ./configure --enable-memcached-igbinary && make && make install && docker-php-ext-enable memcached
-RUN pecl install memcache-4.0.5.2 && docker-php-ext-enable memcache
+RUN pecl install memcache-8.0 && docker-php-ext-enable memcache
 
 # MySQL
 RUN docker-php-ext-install mysqli
@@ -48,7 +53,10 @@ RUN docker-php-ext-install pgsql
 RUN docker-php-ext-install pdo_pgsql
 
 # RabbitMQ
-RUN pecl install amqp-1.10.2 && docker-php-ext-enable amqp
+RUN docker-php-source extract \
+    && git clone --branch latest --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
+    && cd /usr/src/php/ext/amqp && git submodule update --init \
+    && docker-php-ext-install amqp
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \

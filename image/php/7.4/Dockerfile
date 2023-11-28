@@ -12,9 +12,13 @@ libpng-dev \
 libonig-dev \
 libpq-dev \
 librabbitmq-dev \
-libmpdec-dev \
 libzip-dev \
-libevent-dev
+libevent-dev \
+build-essential
+
+RUN curl -O https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.5.1.tar.gz
+RUN tar -zxvf mpdecimal-2.5.1.tar.gz
+RUN cd mpdecimal-2.5.1 && ./configure && make && make install
 
 # PHP extension
 RUN docker-php-ext-install calendar

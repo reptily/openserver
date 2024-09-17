@@ -33,6 +33,8 @@ services:
       - ./www:/var/www
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
       - ./scripts:/bin/app
+    ports:
+      - "${XDEBUG_PORT}:9003"
     networks:
       openweb-network:
         aliases:

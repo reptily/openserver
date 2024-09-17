@@ -1,6 +1,6 @@
   #MySQL Service
   mysql:
-    image: mysql:8.0.13
+    image: "mysql:${MYSQL_VERSION}"
     container_name: "${PREFIX}mysql"
     restart: unless-stopped
     tty: true

@@ -7,3 +7,4 @@ db/pgsql/*
 db/rabbitmq/*
 db/clickhouse/*
 db/mongodb/*
+logs/*

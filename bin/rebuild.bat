@@ -44,4 +44,6 @@ docker rm %PREFIX%clickhouse-client
 docker stop %PREFIX%python
 docker rm %PREFIX%python
 
+cd ./bin
+
 pause

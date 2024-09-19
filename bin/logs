@@ -7,3 +7,4 @@ fi
 
 cd ../
 docker logs $1
+cd ./bin

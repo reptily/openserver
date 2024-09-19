@@ -1,0 +1,23 @@
+version: '3'
+services:
+  webserver:
+    image: nginx:alpine
+    container_name: "ssl-generate-webserver"
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./www:/var/www
+      - ./config/:/etc/nginx/conf.d/
+    networks:
+      - openweb-network
+
+#Docker Networks
+networks:
+  openweb-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local

@@ -1,18 +1,37 @@
 #!/bin/bash
 
-read -p "Input domain: " DOMAIN
-read -p "Input the path to the directory where the index file (example /):" PATH_INDEX
+PREFIX=$(grep PREFIX ../.env | cut -d '=' -f2)
+docker stop $PREFIX"webserver"
+cd ../image/ssl-generate
+docker-compose up -d
+cd ../../bin
 
-SSL_DIR=$(pwd)/../config/nginx/ssl
-WWW_DIR=$(pwd)/../www
-NGINX_CONFIG=../config/nginx/sites/
+
+read -p "Input domain: " DOMAIN
+
+DATE=$(date +"%Y-%m-%d_%H:%M:%S.%s")
+SSL_DIR=$(pwd)/../config/nginx/ssl/
+WWW_DIR=$(pwd)/../image/ssl-generate/www/
+NGINX_CONFIG=$(pwd)/../config/nginx/sites/
+LOGS_DIR=$(pwd)/../logs/
 mkdir $SSL_DIR -p
+
+if [ -d "$SSL_DIR$DOMAIN" ]; then
+    mv $SSL_DIR$DOMAIN $SSL_DIR$DOMAIN-$DATE
+fi
 
 docker run -it --rm --name certbot \
 -v "$SSL_DIR:/etc/letsencrypt/archive" \
--v "$WWW_DIR/$DOMAIN/$PATH_INDEX:/var/www" \
+-v "$WWW_DIR:/var/www" \
+-v "$LOGS_DIR:/var/log" \
 certbot/certbot certonly --webroot -w /var/www -d $DOMAIN \
 --config-dir /etc/letsencrypt \
 --logs-dir /var/log/letsencrypt
 
 sed "s/{{host_name}}/$DOMAIN/g" "$NGINX_CONFIG../template.ssl.conf-example" > "$NGINX_CONFIG$DOMAIN.ssl.conf"
+
+cd ../image/ssl-generate
+docker-compose down
+cd ../../bin
+
+docker start $PREFIX"webserver"

@@ -1,8 +1,10 @@
 .docker
 .env
+.idea
 db/mysql/*
 db/redis/*
 db/pgsql/*
 db/rabbitmq/*
 db/clickhouse/*
 db/mongodb/*
+logs/*

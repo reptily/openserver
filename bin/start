@@ -1,5 +1,14 @@
 #!/bin/bash
 
 cd ../
+
+if [ ! -f ".env" ]; then
+    cp env-example .env
+fi
+
+if [ ! -f "docker-compose.yml" ]; then
+    cp docker-compose-example.yml docker-compose.yml
+fi
+
 docker-compose up -d
 cd ./bin

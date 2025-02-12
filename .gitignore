@@ -8,3 +8,4 @@ db/rabbitmq/*
 db/clickhouse/*
 db/mongodb/*
 logs/*
+docker-compose.yml
